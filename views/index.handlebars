@@ -4,4 +4,38 @@
 Create a button in index.handlebars that will submit the user input into the database --}}
 
 
-<h1>{{burgers}}</h1>
+<h1>Burgers</h1>
+
+<h2>Burgers that are not devoured:</h2>
+
+<ul>
+  {{#each burgers}}
+    {{#unless devoured}}
+      {{> burgers/burger-block devoured=0}}
+    {{/unless}}
+  {{/each}}
+</ul>
+
+<h2>Burgers that are devoured:</h2>
+
+<ul>
+  {{#each burgers}}
+    {{#if devoured}}
+      {{> burgers/burger-block devoured=1}}
+    {{/if}}
+  {{/each}}
+</ul>
+
+<h2>Add a Burger</h2>
+<form class="create-form">
+
+  <div class="form-group">
+    <label for="ca">Burger Name:</label>
+    <input type="text" id="ca" name="name">
+  </div>
+
+
+  <button type="submit">Add Burger</button>
+  {{!-- here, must take the submit input and display it on handlebars  --}}
+
+</form>

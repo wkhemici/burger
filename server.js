@@ -1,47 +1,26 @@
-// Dependencies
 var express = require("express");
-var exphbs = require("express-handlebars");
 
-// Create an instance of the express app.
+var PORT = process.env.PORT || 8000;
+
 var app = express();
 
-// Set the port of our application
-// process.env.PORT lets the port be set by Heroku
-var PORT = process.env.PORT || 3000;
+// Serve static content for the app from the "public" directory in the application directory.
+app.use(express.static("public"));
 
-// Set Handlebars as the default templating engine.
+// Parse application body as JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// Data
-var burgers = [
-  {
-    burgers: "Cheese Burger",
-    devoured: false
-  }, {
-    burgers: "Chicken Burger",
-    devoured: false
-  }, {
-    burgers: "Guacamole Burger",
-    devoured: false
-  }
-];
+// Import routes and give the server access to them.
+var routes = require("./controllers/burgers_controller.js");
 
-// Routes
-app.get("/home", function(req, res) {
-  res.render("index", burgers[0]);
-});
-
-app.get("/", function(req, res) {
-  res.render("index", burgers[1]);
-});
-
-app.get("/burgers", function(req, res) {
-  res.render("all-burgers", {
-    burgers: burgers,
-    devoured: devoured
-  });
-});
+app.use(routes);
 
 // Start our server so that it can begin listening to client requests.
 app.listen(PORT, function() {
